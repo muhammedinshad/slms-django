@@ -1,87 +1,151 @@
 {% extends 'principal_base.html' %}
 
 {% block content %}
-<div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900 mb-2">Principal Dashboard</h1>
-    <p class="text-gray-600">Welcome back! Here's what's happening today.</p>
+<div class="mb-6 md:mb-8 px-4 md:px-0">
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">Principal Dashboard</h1>
+    <p class="text-sm md:text-base text-gray-600">Welcome back! Here's what's happening today.</p>
 </div>
 
-<!-- Stats Cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-    <div class="bg-white rounded-2xl p-7 flex gap-5 shadow-sm border border-gray-200 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
-        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center flex-shrink-0">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<!-- Stats Cards - 2x2 grid on mobile, 4 columns on desktop -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-8 md:mb-12 px-4 md:px-0">
+    <!-- Card 1 - Total Students -->
+    <div class="bg-white rounded-lg md:rounded-2xl p-3 md:p-7 flex flex-col md:flex-row gap-2 md:gap-5 shadow-sm border border-gray-200 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+        <div class="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center flex-shrink-0 mx-auto md:mx-0">
+            <svg class="w-4 h-4 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                 <circle cx="9" cy="7" r="4"></circle>
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
             </svg>
         </div>
-        <div class="flex-1">
-            <div class="text-sm text-gray-600 mb-2">Total Students</div>
-            <div class="text-3xl font-bold text-gray-900 mb-1">{{ std_count }}</div>
-            <div class="text-sm text-green-600">Active learners</div>
+        <div class="flex-1 text-center md:text-left">
+            <div class="text-xs md:text-sm text-gray-600 mb-0.5 md:mb-2 truncate">Total Students</div>
+            <div class="text-xl md:text-3xl font-bold text-gray-900 mb-0.5 md:mb-1">{{ std_count }}</div>
+            <div class="text-xs md:text-sm text-green-600 truncate">Active learners</div>
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl p-7 flex gap-5 shadow-sm border border-gray-200 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
-        <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Card 2 - Total Courses -->
+    <div class="bg-white rounded-lg md:rounded-2xl p-3 md:p-7 flex flex-col md:flex-row gap-2 md:gap-5 shadow-sm border border-gray-200 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+        <div class="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0 mx-auto md:mx-0">
+            <svg class="w-4 h-4 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
                 <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
             </svg>
         </div>
-        <div class="flex-1">
-            <div class="text-sm text-gray-600 mb-2">Total Courses</div>
-            <div class="text-3xl font-bold text-gray-900 mb-1">{{ total_courses }}</div>
-            <div class="text-sm text-gray-600">Add-on programs</div>
+        <div class="flex-1 text-center md:text-left">
+            <div class="text-xs md:text-sm text-gray-600 mb-0.5 md:mb-2 truncate">Total Courses</div>
+            <div class="text-xl md:text-3xl font-bold text-gray-900 mb-0.5 md:mb-1">{{ total_courses }}</div>
+            <div class="text-xs md:text-sm text-gray-600 truncate">Add-on programs</div>
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl p-7 flex gap-5 shadow-sm border border-gray-200 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
-        <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center flex-shrink-0">
-            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Card 3 - Departments -->
+    <div class="bg-white rounded-lg md:rounded-2xl p-3 md:p-7 flex flex-col md:flex-row gap-2 md:gap-5 shadow-sm border border-gray-200 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+        <div class="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center flex-shrink-0 mx-auto md:mx-0">
+            <svg class="w-4 h-4 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
             </svg>
         </div>
-        <div class="flex-1">
-            <div class="text-sm text-gray-600 mb-2">Departments</div>
-            <div class="text-3xl font-bold text-gray-900 mb-1">{{ dep_count }}</div>
-            <div class="text-sm text-gray-600">Active departments</div>
+        <div class="flex-1 text-center md:text-left">
+            <div class="text-xs md:text-sm text-gray-600 mb-0.5 md:mb-2 truncate">Departments</div>
+            <div class="text-xl md:text-3xl font-bold text-gray-900 mb-0.5 md:mb-1">{{ dep_count }}</div>
+            <div class="text-xs md:text-sm text-gray-600 truncate">Active departments</div>
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl p-7 flex gap-5 shadow-sm border border-gray-200 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
-        <div class="w-12 h-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center flex-shrink-0">
-           <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <!-- Card 4 - Pending Courses -->
+    <div class="bg-white rounded-lg md:rounded-2xl p-3 md:p-7 flex flex-col md:flex-row gap-2 md:gap-5 shadow-sm border border-gray-200 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+        <div class="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-green-50 text-green-600 flex items-center justify-center flex-shrink-0 mx-auto md:mx-0">
+           <svg class="w-4 h-4 md:w-8 md:h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
         </div>
-        <div class="flex-1">
-            <div class="text-sm text-gray-600 mb-2">Pending courses</div>
-            <div class="text-3xl font-bold text-gray-900 mb-1">{{ pending_count }}</div>
-            
+        <div class="flex-1 text-center md:text-left">
+            <div class="text-xs md:text-sm text-gray-600 mb-0.5 md:mb-2 truncate">Pending courses</div>
+            <div class="text-xl md:text-3xl font-bold text-gray-900 mb-0.5 md:mb-1">{{ pending_count }}</div>
+            <div class="text-xs md:text-sm text-gray-400 truncate">Awaiting approval</div>
         </div>
     </div>
 </div>
 
-<!-- Course Enrollments -->
-<div class="flex justify-between items-center mb-6">
-    <h2 class="text-2xl font-bold text-gray-900">Course Enrollments</h2>
-    <div class="flex gap-3">
-        <span class="bg-green-100 text-green-800 px-4 py-2 rounded-lg font-semibold text-sm">
-            {{ accepted_count }} Accepted
-        </span>
-        <span class="bg-red-100 text-red-800 px-4 py-2 rounded-lg font-semibold text-sm">
-            {{ rejected_count }} Rejected
-        </span>
+<!-- Course Enrollments Section -->
+<div class="px-4 md:px-0">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h2 class="text-xl md:text-2xl font-bold text-gray-900">Course Enrollments</h2>
+        <div class="flex gap-2 md:gap-3 w-full sm:w-auto">
+            <span class="bg-green-100 text-green-800 px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-semibold text-xs md:text-sm flex-1 sm:flex-none text-center">
+                ✓ {{ accepted_count }} Accepted
+            </span>
+            <span class="bg-red-100 text-red-800 px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-semibold text-xs md:text-sm flex-1 sm:flex-none text-center">
+                ✗ {{ rejected_count }} Rejected
+            </span>
+        </div>
     </div>
-</div>
 
-<div class="bg-white rounded-2xl p-6 border border-gray-200 mb-8 shadow-sm">
-    {% if all_enrollments %}
-    <div class="overflow-x-auto">
+    <!-- Mobile-friendly enrollment cards (visible on small screens) -->
+    <div class="block md:hidden space-y-4 mb-8">
+        {% if all_enrollments %}
+            {% for enrollment in all_enrollments %}
+                {% if enrollment.status == 'pending' %}
+                <div class="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="font-bold text-gray-900">{{ enrollment.student.firstname }} {{ enrollment.student.lastname }}</h3>
+                            <p class="text-sm text-gray-500">{{ enrollment.student.reg_number }}</p>
+                        </div>
+                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            ⏳ Pending
+                        </span>
+                    </div>
+                    
+                    <div class="space-y-3 mb-4">
+                        <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+                            <span class="text-sm text-gray-600">Course</span>
+                            <span class="text-sm font-medium text-gray-900">{{ enrollment.course.course_name }}</span>
+                        </div>
+                        <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+                            <span class="text-sm text-gray-600">Department</span>
+                            <span class="text-sm text-gray-900">{{ enrollment.course.department.dept_name }}</span>
+                        </div>
+                        <div class="flex justify-between items-center pb-2 border-b border-gray-100">
+                            <span class="text-sm text-gray-600">Price</span>
+                            <span class="text-sm font-bold text-gray-900">₹{{ enrollment.course.course_price }}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Date</span>
+                            <span class="text-sm text-gray-900">{{ enrollment.enrollment_date|date:"M d, Y" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <a href="{% url 'approve_enrollment' enrollment.id %}" 
+                           class="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg transition-colors font-semibold text-sm text-center"
+                           onclick="return confirm('Accept this enrollment?')">
+                            ✓ Accept
+                        </a>
+                        <a href="{% url 'reject_enrollment' enrollment.id %}" 
+                           class="flex-1 bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg transition-colors font-semibold text-sm text-center"
+                           onclick="return confirm('Reject this enrollment?')">
+                            ✗ Reject
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <div class="text-center py-12 bg-white rounded-xl">
+                <span class="text-6xl mb-4 block">📚</span>
+                <p class="text-gray-600 text-lg mb-2">No enrollments yet</p>
+                <p class="text-gray-500">Enrollments will appear here when students enroll</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Desktop table (hidden on mobile) -->
+    <div class="hidden md:block bg-white rounded-2xl p-6 border border-gray-200 mb-8 shadow-sm overflow-x-auto">
+        {% if all_enrollments %}
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
@@ -120,81 +184,136 @@
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        {% if enrollment.status == 'pending' %}
                         <div class="flex gap-2">
                             <a href="{% url 'approve_enrollment' enrollment.id %}" 
-                               class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors font-semibold"
+                               class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors font-semibold text-sm"
                                onclick="return confirm('Accept this enrollment?')">
-                                ✓ Accept
+                                Accept
                             </a>
                             <a href="{% url 'reject_enrollment' enrollment.id %}" 
-                               class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors font-semibold"
+                               class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors font-semibold text-sm"
                                onclick="return confirm('Reject this enrollment?')">
-                                ✗ Reject
+                                Reject
                             </a>
                         </div>
-                        {% else %}
-                        <span class="text-gray-400 text-sm">No actions</span>
-                        {% endif %}
                     </td>
                 </tr>
                 {% endif %}
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+        <div class="text-center py-12">
+            <span class="text-6xl mb-4 block">📚</span>
+            <p class="text-gray-600 text-lg mb-2">No enrollments yet</p>
+            <p class="text-gray-500">Enrollments will appear here when students enroll in courses</p>
+        </div>
+        {% endif %}
     </div>
-    {% else %}
-    <div class="text-center py-12">
-        <span class="text-6xl mb-4 block">📚</span>
-        <p class="text-gray-600 text-lg mb-2">No enrollments yet</p>
-        <p class="text-gray-500">Enrollments will appear here when students enroll in courses</p>
-    </div>
-    {% endif %}
 </div>
 
-<!-- Departments Overview -->
-<div class="flex justify-between items-center mb-6">
-    <h2 class="text-2xl font-bold text-gray-900">Departments Overview</h2>
-    <a href="{% url 'add_department' %}" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-all hover:-translate-y-0.5 hover:shadow-lg inline-block">
-        + Add Department
-    </a>
-</div>
-
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    {% for dept in departments %}
-    <div class="bg-white rounded-2xl p-7 border border-gray-200 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
-        <div class="flex gap-4 mb-6">
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center text-2xl font-bold flex-shrink-0">
-                {{ dept.dept_name|first }}
-            </div>
-            <div class="flex-1">
-                <h3 class="text-lg font-bold text-gray-900 mb-2">{{ dept.dept_name }}</h3>
-                <p class="text-sm text-gray-600 leading-relaxed">{{ dept.dept_description|truncatewords:10 }}</p>
-            </div>
-        </div>
-        <div class="flex gap-8 py-4 border-t border-b border-gray-200 mb-4">
-            <div class="flex flex-col gap-1">
-                <span class="text-xs text-gray-600 uppercase tracking-wide">Courses</span>
-                <span class="text-xl font-bold text-gray-900">{{ dept.course_count }}</span>
-            </div>
-            <div class="flex flex-col gap-1">
-                <span class="text-xs text-gray-600 uppercase tracking-wide">Revenue</span>
-                <span class="text-xl font-bold text-gray-900">₹{{ dept.total_revenue|default:"0" }}</span>
-            </div>
-        </div>
-    </div>
-    {% empty %}
-    <div class="col-span-full text-center py-16">
-        <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-        </svg>
-        <p class="text-gray-600 mb-6">No departments yet</p>
-        <a href="{% url 'add_department' %}" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-all hover:-translate-y-0.5 hover:shadow-lg inline-block">
-            Create First Department
+<!-- Departments Overview - Now 2 columns on mobile -->
+<div class="px-4 md:px-0">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h2 class="text-xl md:text-2xl font-bold text-gray-900">Departments Overview</h2>
+        <a href="{% url 'add_department' %}" class="bg-blue-500 hover:bg-blue-600 text-white px-5 md:px-6 py-2.5 md:py-3 rounded-lg md:rounded-xl font-semibold text-sm transition-all hover:-translate-y-0.5 hover:shadow-lg inline-block text-center w-full sm:w-auto">
+            + Add Department
         </a>
     </div>
-    {% endfor %}
+
+    <!-- Changed from grid-cols-1 to grid-cols-2 on mobile -->
+    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+        {% for dept in departments %}
+        <div class="bg-white rounded-lg md:rounded-2xl p-3 md:p-7 border border-gray-200 hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+            <div class="flex flex-col md:flex-row gap-2 md:gap-4 mb-3 md:mb-6">
+                <div class="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center text-base md:text-2xl font-bold flex-shrink-0 mx-auto md:mx-0">
+                    {{ dept.dept_name|first }}
+                </div>
+                <div class="flex-1 min-w-0 text-center md:text-left">
+                    <h3 class="text-sm md:text-lg font-bold text-gray-900 mb-1 md:mb-2 truncate">{{ dept.dept_name|truncatechars:12 }}</h3>
+                    <p class="text-xs md:text-sm text-gray-600 leading-relaxed line-clamp-2 hidden md:block">{{ dept.dept_description|truncatewords:8 }}</p>
+                    <!-- Mobile only short description -->
+                    <p class="text-xs text-gray-500 md:hidden line-clamp-1">{{ dept.dept_description|truncatewords:4 }}</p>
+                </div>
+            </div>
+            <div class="flex gap-2 md:gap-8 py-2 md:py-4 border-t border-b border-gray-200 mb-2 md:mb-4">
+                <div class="flex-1 text-center">
+                    <span class="text-xs text-gray-600 uppercase tracking-wide block mb-0.5 md:mb-1">Courses</span>
+                    <span class="text-base md:text-xl font-bold text-gray-900">{{ dept.course_count }}</span>
+                </div>
+                <div class="flex-1 text-center">
+                    <span class="text-xs text-gray-600 uppercase tracking-wide block mb-0.5 md:mb-1">Revenue</span>
+                    <span class="text-sm md:text-xl font-bold text-gray-900">₹{{ dept.total_revenue|default:"0" }}</span>
+                </div>
+            </div>
+            <!-- Mobile only view details link -->
+            <div class="md:hidden text-center">
+                <a href="#" class="text-xs text-blue-600 hover:text-blue-800 font-medium">View Details →</a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-2 md:col-span-2 lg:col-span-3 text-center py-8 md:py-16 bg-white rounded-xl">
+            <svg class="w-10 h-10 md:w-16 md:h-16 mx-auto mb-3 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            </svg>
+            <p class="text-gray-600 mb-3 md:mb-6 text-sm md:text-base">No departments yet</p>
+            <a href="{% url 'add_department' %}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl font-semibold text-xs md:text-sm transition-all hover:-translate-y-0.5 hover:shadow-lg inline-block">
+                Create First Department
+            </a>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
+<style>
+    /* Mobile-specific optimizations */
+    @media (max-width: 768px) {
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* Better touch targets */
+        button, a, [role="button"] {
+            min-height: 44px;
+            min-width: 44px;
+        }
+        
+        /* Prevent text overflow */
+        .truncate {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        /* Stats cards mobile optimization */
+        .grid-cols-2 {
+            gap: 0.75rem;
+        }
+        
+        /* Center align text on mobile */
+        .text-center {
+            text-align: center;
+        }
+        
+        /* Department cards mobile optimization */
+        .grid-cols-2 > div {
+            padding: 0.75rem;
+        }
+        
+        /* Smaller revenue text on mobile */
+        .text-sm {
+            font-size: 0.8rem;
+        }
+    }
+</style>
 {% endblock %}
-

@@ -1,14 +1,21 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Principal Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'image/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'image/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'image/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'image/site.webmanifest' %}">
     <script>
+
         tailwind.config = {
             theme: {
                 extend: {
@@ -19,103 +26,303 @@
             }
         }
     </script>
+    <style>
+        /* Mobile-first responsive adjustments */
+        @media (max-width: 768px) {
+            /* Better touch targets */
+            button, a, [role="button"], 
+            .sidebar-link, .nav-item {
+                min-height: 48px;
+                min-width: 48px;
+            }
+            
+            /* Smooth scrolling */
+            html {
+                scroll-behavior: smooth;
+            }
+            
+            /* Prevent text overflow */
+            .truncate-mobile {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            
+            /* Better tap highlight */
+            * {
+                -webkit-tap-highlight-color: rgba(59, 130, 246, 0.1);
+            }
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Sidebar transition for mobile */
+        .sidebar-transition {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Mobile menu backdrop */
+        .backdrop-blur {
+            backdrop-filter: blur(4px);
+        }
+
+        /* Mobile menu button animation */
+        .menu-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .menu-btn.active {
+            transform: rotate(90deg);
+        }
+    </style>
 </head>
-<body class="font-outfit bg-gray-50 text-gray-900">
+<body class="font-outfit bg-gray-50 text-gray-900 overflow-x-hidden">
+
+    <!-- Mobile Menu Backdrop (hidden by default) -->
+    <div id="menuBackdrop" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40 hidden lg:hidden transition-opacity duration-300"></div>
 
     <!-- Top Navbar -->
-    <nav class="fixed top-0 left-0 right-0 h-[70px] bg-white border-b border-gray-200 z-50 shadow-sm">
-        <div class="h-full flex items-center justify-between px-8">
-            <a href="{% url 'principal_dashboard' %}" class="flex items-center gap-3 no-underline">
-                <div class="w-9 h-9 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center font-bold text-white text-lg">
+    <nav class="fixed top-0 left-0 right-0 h-[60px] md:h-[70px] bg-white border-b border-gray-200 z-50 shadow-sm">
+        <div class="h-full flex items-center justify-between px-4 md:px-8">
+            <a href="{% url 'principal_dashboard' %}" class="flex items-center gap-2 md:gap-3 no-underline">
+                <div class="w-8 h-8 md:w-9 md:h-9 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg md:rounded-xl flex items-center justify-center font-bold text-white text-base md:text-lg">
                     P
                 </div>
-                <span class="font-bold text-xl text-gray-900 tracking-tight hidden md:block">Principal Portal</span>
+                <span class="font-bold text-lg md:text-xl text-gray-900 tracking-tight hidden sm:block">Principal Portal</span>
+                <span class="font-bold text-lg text-gray-900 tracking-tight sm:hidden">Portal</span>
             </a>
 
-            <div class="flex items-center gap-6">
-                    <a href="{% url 'logout' %}" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg font-semibold text-sm transition-all hover:-translate-y-0.5">Logout</a>
+            <div class="flex items-center gap-2 md:gap-6">
+                <!-- Mobile Menu Button - Now positioned in navbar -->
+                <button id="mobileMenuBtn" class="menu-btn lg:hidden w-10 h-10 md:w-11 md:h-11 bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-lg shadow-md hover:shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95">
+                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+
+                <a href="{% url 'logout' %}" class="bg-red-500 hover:bg-red-600 text-white px-3 md:px-5 py-1.5 md:py-2 rounded-lg font-semibold text-xs md:text-sm transition-all hover:-translate-y-0.5 flex items-center gap-1 shadow-md hover:shadow-lg">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    <span class="hidden sm:inline">Logout</span>
+                </a>
             </div>
         </div>
     </nav>
 
-    <!-- Sidebar -->
-    <aside class="fixed left-0 top-[70px] bottom-0 w-64 bg-white border-r border-gray-200 py-8 overflow-y-auto z-40">
-        <ul class="space-y-2">
-            <li class="px-4">
+    <!-- Sidebar - Hidden on mobile by default, slides in when menu button clicked -->
+    <aside id="sidebar" class="fixed left-0 top-[60px] md:top-[70px] bottom-0 w-[280px] md:w-64 bg-white border-r border-gray-200 py-4 md:py-8 overflow-y-auto z-50 sidebar-transition shadow-xl
+                lg:translate-x-0 
+                -translate-x-full lg:translate-x-0">
+        
+        <!-- Sidebar Header with close button -->
+        <div class="flex items-center justify-between px-4 pb-4 border-b border-gray-200 lg:hidden">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center font-bold text-white text-base">
+                    P
+                </div>
+                <span class="font-bold text-gray-900">Menu</span>
+            </div>
+            <!-- Mobile close button -->
+            <button id="closeSidebarBtn" class="lg:hidden w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors flex items-center justify-center">
+                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <ul class="space-y-1 md:space-y-2 px-3 mt-4">
+            <li>
                 <a href="{% url 'principal_dashboard' %}" 
-                   class="flex items-center gap-3 px-4 py-3.5 rounded-xl font-medium text-sm transition-all
+                   class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2.5 md:py-3.5 rounded-lg md:rounded-xl font-medium text-sm transition-all
                    {% if request.resolver_match.url_name == 'principal_dashboard' %}bg-blue-50 text-blue-600{% else %}text-gray-600 hover:bg-gray-100 hover:text-gray-900{% endif %}">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="3" width="7" height="7"></rect>
                         <rect x="14" y="3" width="7" height="7"></rect>
                         <rect x="14" y="14" width="7" height="7"></rect>
                         <rect x="3" y="14" width="7" height="7"></rect>
                     </svg>
-                    Dashboard
+                    <span class="truncate">Dashboard</span>
                 </a>
             </li>
             
-            <li class="h-px bg-gray-200 mx-4 my-6"></li>
+            <li class="h-px bg-gray-200 mx-3 my-3 md:my-6"></li>
             
-            <li class="px-4">
+            <li>
                 <a href="{% url 'student_manage' %}" 
-                   class="flex items-center gap-3 px-4 py-3.5 rounded-xl font-medium text-sm transition-all
+                   class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2.5 md:py-3.5 rounded-lg md:rounded-xl font-medium text-sm transition-all
                    {% if request.resolver_match.url_name == 'student_manage' %}bg-blue-50 text-blue-600{% else %}text-gray-600 hover:bg-gray-100 hover:text-gray-900{% endif %}">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                         <circle cx="9" cy="7" r="4"></circle>
                         <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                         <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                     </svg>
-                    Student Management
+                    <span class="truncate">Student Management</span>
                 </a>
             </li>
             
-            <li class="px-4">
+            <li>
                 <a href="{% url 'addon_course_list' %}" 
-                   class="flex items-center gap-3 px-4 py-3.5 rounded-xl font-medium text-sm transition-all
+                   class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2.5 md:py-3.5 rounded-lg md:rounded-xl font-medium text-sm transition-all
                    {% if request.resolver_match.url_name == 'addon_course_list' %}bg-blue-50 text-blue-600{% else %}text-gray-600 hover:bg-gray-100 hover:text-gray-900{% endif %}">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
                         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                     </svg>
-                    Course Management
+                    <span class="truncate">Course Management</span>
                 </a>
             </li>
             
-            <li class="px-4">
+            <li>
                 <a href="{% url 'add_addon_course' %}" 
-                   class="flex items-center gap-3 px-4 py-3.5 rounded-xl font-medium text-sm transition-all
+                   class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2.5 md:py-3.5 rounded-lg md:rounded-xl font-medium text-sm transition-all
                    {% if request.resolver_match.url_name == 'add_addon_course' %}bg-blue-50 text-blue-600{% else %}text-gray-600 hover:bg-gray-100 hover:text-gray-900{% endif %}">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="12" y1="8" x2="12" y2="16"></line>
                         <line x1="8" y1="12" x2="16" y2="12"></line>
                     </svg>
-                    Add Course
+                    <span class="truncate">Add Course</span>
                 </a>
             </li>
             
-            <li class="px-4">
+            <li>
                 <a href="{% url 'add_department' %}" 
-                   class="flex items-center gap-3 px-4 py-3.5 rounded-xl font-medium text-sm transition-all
+                   class="sidebar-link flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2.5 md:py-3.5 rounded-lg md:rounded-xl font-medium text-sm transition-all
                    {% if request.resolver_match.url_name == 'add_department' %}bg-blue-50 text-blue-600{% else %}text-gray-600 hover:bg-gray-100 hover:text-gray-900{% endif %}">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="w-4 h-4 md:w-5 md:h-5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="12" y1="8" x2="12" y2="16"></line>
                         <line x1="8" y1="12" x2="16" y2="12"></line>
                     </svg>
-                    Add Department
+                    <span class="truncate">Add Department</span>
                 </a>
             </li>
         </ul>
+
+        <!-- User info at bottom of sidebar -->
+        <div class="absolute bottom-4 left-0 right-0 px-4">
+            <div class="border-t border-gray-200 pt-4 mt-4">
+                <div class="flex items-center gap-3 px-3">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">
+                        P
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate">Principal</p>
+                        <p class="text-xs text-gray-500 truncate">Administrator</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </aside>
 
     <!-- Main Content Area -->
-    <main class="ml-64 mt-[70px] p-8 min-h-screen">
-        {% block content %}
-        {% endblock %}
+    <main id="mainContent" class="lg:ml-64 pt-[60px] md:pt-[70px] min-h-screen transition-all duration-300">
+        <div class="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
+            {% block content %}
+            {% endblock %}
+        </div>
     </main>
+
+    <!-- JavaScript for mobile menu functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+            const sidebar = document.getElementById('sidebar');
+            const menuBackdrop = document.getElementById('menuBackdrop');
+            const mainContent = document.getElementById('mainContent');
+
+            // Function to open sidebar on mobile
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                menuBackdrop.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent body scrolling
+                mobileMenuBtn.classList.add('active');
+            }
+
+            // Function to close sidebar on mobile
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                menuBackdrop.classList.add('hidden');
+                document.body.style.overflow = ''; // Restore body scrolling
+                mobileMenuBtn.classList.remove('active');
+            }
+
+            // Toggle sidebar on mobile menu button click
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', openSidebar);
+            }
+
+            // Close sidebar when close button is clicked
+            if (closeSidebarBtn) {
+                closeSidebarBtn.addEventListener('click', closeSidebar);
+            }
+
+            // Close sidebar when backdrop is clicked
+            if (menuBackdrop) {
+                menuBackdrop.addEventListener('click', closeSidebar);
+            }
+
+            // Close sidebar when a link is clicked (on mobile)
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 1024) { // lg breakpoint
+                        closeSidebar();
+                    }
+                });
+            });
+
+            // Handle window resize
+            let resizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    if (window.innerWidth >= 1024) { // lg breakpoint
+                        // On desktop, ensure sidebar is visible and remove mobile adjustments
+                        sidebar.classList.remove('-translate-x-full');
+                        menuBackdrop.classList.add('hidden');
+                        document.body.style.overflow = '';
+                        mobileMenuBtn.classList.remove('active');
+                    } else {
+                        // On mobile, hide sidebar by default
+                        sidebar.classList.add('-translate-x-full');
+                    }
+                }, 250);
+            });
+
+            // Handle touch events for swipe to close (optional)
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            sidebar.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            }, false);
+            
+            sidebar.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                if (touchEndX - touchStartX < -50) { // Swipe left to close
+                    closeSidebar();
+                }
+            }, false);
+
+            // Handle escape key to close sidebar
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && !sidebar.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
+                    closeSidebar();
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>

@@ -1,94 +1,257 @@
 {% extends 'principal_base.html' %}
 
 {% block content %}
-<div class="flex justify-between items-center mb-8 flex-wrap gap-4">
+<!-- Header Section - Compact -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
     <div>
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Student Management</h1>
-        <p class="text-gray-600">Manage all registered students</p>
+        <h1 class="text-xl md:text-2xl font-bold text-gray-900">Student Management</h1>
+        <p class="text-xs md:text-sm text-gray-500 mt-0.5">{{ std|length }} total students</p>
+    </div>
+    
+    <!-- Search Bar - Compact -->
+    <div class="w-full sm:w-auto">
+        <div class="relative">
+            <input type="text" 
+                   placeholder="Search students..." 
+                   class="w-full sm:w-56 md:w-64 px-3 py-2 pl-8 text-xs md:text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+            <svg class="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+        </div>
     </div>
 </div>
 
-<div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-    <table class="w-full border-collapse">
-        <thead class="bg-gray-50 border-b border-gray-200">
-            <tr>
-                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Username</th>
-                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
-                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Department</th>
-                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-            {% for student in std %}
-            <tr class="hover:bg-gray-50 transition-colors">
-                <td class="px-6 py-5">
-                    <div class="font-semibold text-gray-900">{{ student.user.username }}</div>
-                </td>
-                <td class="px-6 py-5">
-                    <div class="text-gray-600 text-sm">{{ student.user.email }}</div>
-                </td>
-                <td class="px-6 py-5">
-                    <span class="inline-block px-3.5 py-1.5 bg-purple-50 text-purple-600 rounded-lg text-sm font-semibold">
-                        {{ student.department|default:"Not Assigned" }}
-                    </span>
-                </td>
-                <td class="px-6 py-5">
-                    {% if student.is_blocked %}
-                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-red-50 text-red-600 rounded-lg text-sm font-semibold">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
-                            </svg>
-                            Blocked
-                        </span>
-                    {% else %}
-                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-green-50 text-green-600 rounded-lg text-sm font-semibold">
-                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                            </svg>
-                            Active
-                        </span>
-                    {% endif %}
-                </td>
-                <td class="px-6 py-5">
-                    <div class="flex gap-2">
-                        <a href="{% url 'student_detail' student.id %}" 
-                           class="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-semibold hover:bg-blue-100 transition-colors">
-                            View
-                        </a>
-                        
-                        <a href="{% url 'block_student' student.id %}" 
-                           class="px-4 py-2 {% if student.is_blocked %}bg-green-50 text-green-600 hover:bg-green-100{% else %}bg-orange-50 text-orange-600 hover:bg-orange-100{% endif %} rounded-lg text-sm font-semibold transition-colors">
-                            {% if student.is_blocked %}Unblock{% else %}Block{% endif %}
-                        </a>
-                        
-                        <a href="{% url 'delete_student' student.id %}" 
-                           onclick="return confirm('Are you sure you want to delete this student?')"
-                           class="px-4 py-2 bg-red-50 text-red-500 rounded-lg text-sm font-semibold hover:bg-red-100 transition-colors">
-                            Delete
-                        </a>
+<!-- Mobile View (Cards) - Compact Design -->
+<div class="block md:hidden space-y-2">
+    {% for student in std %}
+    <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+        <!-- Student Row - Compact -->
+        <div class="p-3">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs">
+                        {{ student.user.username|first|upper }}
                     </div>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5" class="px-6 py-16">
-                    <div class="text-center">
-                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    <div>
+                        <h3 class="font-medium text-sm text-gray-900">{{ student.user.username }}</h3>
+                        <p class="text-xs text-gray-500">{{ student.user.email|truncatechars:20 }}</p>
+                    </div>
+                </div>
+                {% if student.is_blocked %}
+                    <span class="px-2 py-1 bg-red-50 text-red-600 rounded-md text-xs font-medium flex items-center gap-1">
+                        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
                         </svg>
-                        <p class="text-gray-600 mb-6">No students yet</p>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                        Blocked
+                    </span>
+                {% else %}
+                    <span class="px-2 py-1 bg-green-50 text-green-600 rounded-md text-xs font-medium flex items-center gap-1">
+                        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        Active
+                    </span>
+                {% endif %}
+            </div>
+            
+            <!-- Department - Compact -->
+            <div class="mb-2">
+                <span class="text-xs px-2 py-1 bg-purple-50 text-purple-600 rounded-md">
+                    {{ student.department|default:"Not Assigned" }}
+                </span>
+            </div>
+            
+            <!-- Action Buttons - Small and Compact -->
+            <div class="grid grid-cols-3 gap-1 mt-2">
+                <a href="{% url 'student_detail' student.id %}" 
+                   class="flex items-center justify-center gap-1 px-2 py-1.5 bg-blue-50 text-blue-600 rounded-md text-xs font-medium hover:bg-blue-100 transition-all">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M22 12c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2s10 4.48 10 10z"></path>
+                    </svg>
+                    View
+                </a>
+                
+                <a href="{% url 'block_student' student.id %}" 
+                   class="flex items-center justify-center gap-1 px-2 py-1.5 {% if student.is_blocked %}bg-green-50 text-green-600 hover:bg-green-100{% else %}bg-orange-50 text-orange-600 hover:bg-orange-100{% endif %} rounded-md text-xs font-medium transition-all">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        {% if student.is_blocked %}
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                        {% else %}
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                        {% endif %}
+                    </svg>
+                    {% if student.is_blocked %}Unblock{% else %}Block{% endif %}
+                </a>
+                
+                <a href="{% url 'delete_student' student.id %}" 
+                   onclick="return confirm('Are you sure you want to delete this student?')"
+                   class="flex items-center justify-center gap-1 px-2 py-1.5 bg-red-50 text-red-500 rounded-md text-xs font-medium hover:bg-red-100 transition-all">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
+                    </svg>
+                    Del
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <!-- Empty State - Compact -->
+    <div class="bg-white rounded-lg border border-gray-200 p-6 text-center">
+        <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        <p class="text-gray-500 text-sm mb-1">No students yet</p>
+        <p class="text-xs text-gray-400">Students will appear here once they register</p>
+    </div>
+    {% endfor %}
 </div>
 
+<!-- Desktop View (Table) - Compact -->
+<div class="hidden md:block bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+            <thead class="bg-gray-50 border-b border-gray-200">
+                <tr>
+                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
+                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
+                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for student in std %}
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs">
+                                {{ student.user.username|first|upper }}
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">{{ student.user.username }}</span>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3">
+                        <span class="text-xs text-gray-600">{{ student.user.email|truncatechars:25 }}</span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <span class="inline-block px-2 py-0.5 bg-purple-50 text-purple-600 rounded text-xs font-medium">
+                            {{ student.department|default:"Not Assigned"|truncatechars:15 }}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3">
+                        {% if student.is_blocked %}
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-red-50 text-red-600 rounded text-xs font-medium">
+                                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                                </svg>
+                                Blocked
+                            </span>
+                        {% else %}
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-green-50 text-green-600 rounded text-xs font-medium">
+                                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                                Active
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex items-center gap-1">
+                            <a href="{% url 'student_detail' student.id %}" 
+                               class="px-2 py-1 bg-blue-50 text-blue-600 rounded text-xs font-medium hover:bg-blue-100 transition-colors whitespace-nowrap">
+                                View
+                            </a>
+                            
+                            <a href="{% url 'block_student' student.id %}" 
+                               class="px-2 py-1 {% if student.is_blocked %}bg-green-50 text-green-600 hover:bg-green-100{% else %}bg-orange-50 text-orange-600 hover:bg-orange-100{% endif %} rounded text-xs font-medium transition-colors whitespace-nowrap">
+                                {% if student.is_blocked %}Unblock{% else %}Block{% endif %}
+                            </a>
+                            
+                            <a href="{% url 'delete_student' student.id %}" 
+                               onclick="return confirm('Are you sure you want to delete this student?')"
+                               class="px-2 py-1 bg-red-50 text-red-500 rounded text-xs font-medium hover:bg-red-100 transition-colors whitespace-nowrap">
+                                Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="px-4 py-8 text-center">
+                        <div class="text-center">
+                            <svg class="w-10 h-10 mx-auto mb-2 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                            <p class="text-gray-500 text-sm mb-1">No students yet</p>
+                            <p class="text-xs text-gray-400">Students will appear here once they register</p>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Footer with count - Compact -->
+<div class="mt-3 flex justify-between items-center">
+    <span class="text-xs text-gray-500">
+        Showing {{ std|length }} student{% if std|length != 1 %}s{% endif %}
+    </span>
+    
+    <!-- Compact Pagination (if needed) -->
+    {% if std|length > 10 %}
+    <div class="flex gap-1">
+        <button class="w-7 h-7 flex items-center justify-center rounded border border-gray-200 text-xs hover:bg-gray-50">←</button>
+        <button class="w-7 h-7 flex items-center justify-center rounded bg-blue-500 text-white text-xs">1</button>
+        <button class="w-7 h-7 flex items-center justify-center rounded border border-gray-200 text-xs hover:bg-gray-50">2</button>
+        <button class="w-7 h-7 flex items-center justify-center rounded border border-gray-200 text-xs hover:bg-gray-50">3</button>
+        <button class="w-7 h-7 flex items-center justify-center rounded border border-gray-200 text-xs hover:bg-gray-50">→</button>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    /* Ultra-compact mobile styles */
+    @media (max-width: 768px) {
+        /* Smaller touch targets but still tappable */
+        button, a, [role="button"] {
+            min-height: 36px;
+            min-width: 36px;
+        }
+        
+        /* Tighter spacing */
+        .space-y-2 > * {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Compact card padding */
+        .p-3 {
+            padding: 0.75rem;
+        }
+        
+        /* Smaller text for compact view */
+        .text-xs {
+            font-size: 0.7rem;
+        }
+        
+        /* Grid gap reduction */
+        .gap-1 {
+            gap: 0.2rem;
+        }
+    }
+</style>
 {% endblock %}
